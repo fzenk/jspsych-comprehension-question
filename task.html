@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych-comp.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-html-form.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-fullscreen.js"></script>
+    <script src="jspsych/plugins/jspsych-preload.js"></script>
+    <script src="jspsych-elicited-production-setup.js"></script>
+    <script src="jspsych-elicited-production-response.js"></script>
+    <script src="jspsych-moving-window.js"></script>
+    <script src="jspsych-acceptability-judgment.js"></script>
+    <script src="english-language-survey-text.js"></script>
+    <script src="shuffle.js"></script>
+    <script src="trial-info.js"></script>
+    <link rel="stylesheet" href="jspsych/css/jspsych.css"></link>
+</head>
+<body></body>
+<script>
+
+    // remove before posting
+    CONDITION = 0;
+
+    let timeline = [];
+
+    var trial1 = {
+        type: 'moving-window',
+        sent: 'The dog chased the cat.',
+        font_size: 17
+    };
+    //timeline.push(trial1);
+
+    var question1 = {
+        type: 'comp',
+        stimulus: 'chased',
+        choices: ['yes', 'no'],
+
+    };
+    timeline.push(question1);
+
+    /*
+
+    // capture info from Prolific
+    var prolific_pid = jsPsych.data.getURLVariable('PROLIFIC_PID');
+    var study_id = jsPsych.data.getURLVariable('STUDY_ID');
+    var session_id = jsPsych.data.getURLVariable('SESSION_ID');
+
+    // add info from Prolific to results
+    jsPsych.data.addProperties({
+        participant: prolific_pid,
+        study: study_id,
+        session: session_id
+    });
+
+    // define formatting for inactive button used in instructions
+    var inactive_btn = '.inactive-btn {display: inline-block; padding: 6px 12px; margin: 0px; font-size: 14px; font-weight: 400; font-family: "Open Sans", "Arial", sans-serif; cursor: pointer; line-height: 1.4; text-align: center; white-space: nowrap; vertical-align: middle; background-image: none; border: 1px solid transparent; border-radius: 4px; color: #333; background-color: #fff; border-color: #ccc; pointer-events: none;}';
+
+    // -----------------------------------------------------------------------------
+    // preliminaries
+    // -----------------------------------------------------------------------------
+
+    // preload media
+
+    var preload = {
+        type: 'preload',
+        images: [
+            'img_warning.png',
+            'img_checked.png',
+            'img_boy1.png',
+            'img_boy2.png',
+            'img_girl1.png',
+            'img_girl2.png',
+            'img_man1.png',
+            'img_man2.png',
+            'img_woman1.png',
+            'img_woman2.png',
+            'img_overview.jpg',
+            'img_recorder.png',
+            'https://image.freepik.com/free-vector/people-using-online-translation-app_74855-7800.jpg',
+            'https://image.freepik.com/free-vector/radio-host-speaking-microphone-laptop-air-presenter-blogger-cartoon-illustration_74855-14500.jpg',
+            'https://image.freepik.com/free-vector/multiethnic-children-exercising-gym-body-training-sport-activity-fitness-kids-cartoon-illustration_74855-14461.jpg',
+            'https://image.freepik.com/free-vector/men-success-laptop-relieve-work-from-home-computer-great_10045-646.jpg',
+            'https://image.freepik.com/free-vector/book-readers-concept_74855-6263.jpg',
+            'https://image.freepik.com/free-vector/happy-man-holding-five-golden-stars-customer-review-social-media-flat-illustration_74855-14060.jpg',
+            'https://image.freepik.com/free-vector/tiny-screenwriter-sitting-retro-typewriter-thinking-screenplay-while-paper-drafts-flying-around-author_74855-14178.jpg',
+            'https://image.freepik.com/free-vector/online-survey-analysis-electronic-data-collection-digital-research-tool-computerized-study-analyst-considering-feedback-results-analyzing-info_335657-2385.jpg',
+        ],
+    }
+    timeline.push(preload);
+
+    // consent form
+
+     var consent = {
+        type: 'survey-html-form',
+        data: {trial_name: 'consent'},
+        button_label: 'Continue',
+        html: 
+            '<style>p {text-align:left;} .section {padding:.5em;} table {border-collapse:collapse; margin-left:auto; margin-right:auto;} .row {border:3px solid #c6c6c6;box-shadow:2px 2px 5px #999; padding:.5em;} td {text-align:left;} </style>'+
+            '<img src="img_overview.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold">Reading, Rating, and Recording Sentences in English</span>'+
+            '<p>Welcome! In this experiment, you will complete a language background survey and four language tasks that involve reading, rating, and recording sentences in English. Your responses will provide important data for a dissertation research project.</p>'+
+            '<p>Before we get started with the experiment, it is important that you know your rights as a participant. Click on the link below to open the consent form in a new tab on your browser.</p>'+
+            '<a href="english-consent-form.pdf" target="_blank" style="font-size:115%;" >Click here to read the consent form</a><br><br>'+
+            '<table>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="agreement1" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>I have read and understood all the contents of the consent form, and I agree to participate in the experiment</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="agreement2" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>I agree to read all the instructions carefully and to give each task my best effort</p>'+
+            '</div></td></tr>'+
+            '</table><br>',
+        on_load: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(consent);
+
+    // language survey
+
+    var language_survey = {
+        type: 'survey-html-form',
+        data: {trial_name: 'language_survey'},
+        button_label: 'Continue',
+        html: english_language_survey_text,
+    };
+
+    var language_survey_section = {
+        timeline: [language_survey],
+        randomize_order: false,
+        on_load: function() {
+            document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(language_survey_section);
+
+       // -----------------------------------------------------------------------------
+    // task 1: elicited production task
+    // -----------------------------------------------------------------------------
+
+    // By default, the audio will be saved as a JSON/CSV-friendly base64 string and will need to be converted back to an audio file offline. This can be done using existing functions in R (base64enc package) or Python (base64 library). You can also test the conversion using an online base64-to-audio converter like this one: https://base64.guru/converter/decode/audio. The default postprocessing function can be overwritten by passing a custom function to the 'postprocessing' parameter. This provides the option to save the data as an audio file rather than a string. See the plugin documentation for more details. 
+
+    // define running order for stimuli
+    var plist1 = rshuffle(pcrit1, pfill);
+    var plist2 = rshuffle(pcrit1, pfill);
+    var plist3 = rshuffle(pcrit2, pfill);
+    var plist4 = rshuffle(pcrit2, pfill);
+    var plist5 = rshuffle(pcrit3, pfill);
+    var plist6 = rshuffle(pcrit3, pfill);
+
+    var ept_instructions = {
+        type: 'survey-html-form',
+        data: {trial_name: 'ept_instructions'},
+        button_label: 'Continue',
+        html: '<style>p {text-align:left;} .section {padding:.5em;} table {border-collapse: collapse;} .row {border:3px solid #c6c6c6;box-shadow:2px 2px 5px #999; padding:.5em;} td {text-align:left;}'+inactive_btn+' .center {display: flex; justify-content: center; align-items: center;}</style>'+ 
+            '<img src="https://image.freepik.com/free-vector/radio-host-speaking-microphone-laptop-air-presenter-blogger-cartoon-illustration_74855-14500.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Task 1: Sentence Recording Task</span>'+
+            '<p style="text-align:center;">Check the box next to each section to indicate that you have read and understood the instructions.</p>'+
+            '<table><tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions1" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>In this task, you will see pictures of people accompanied by sentences describing them. After reading the sentences, you will be asked a question about one of the people, and your response will be audio recorded.</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions2" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>First, you will see a pair of pictures with sentences describing them, as shown below.</p>'+
+            '<div style="width:500px; margin:auto; border:2px; border-style:ridge; padding:.5em;"><table style="margin-left:auto; margin-right:auto;"><tr><td><img src="img_boy1.png" style="width:100px;"></img></td><td>This boy won the race.</td></tr><tr><td><img src="img_boy2.png" style="width:100px;"></img></td><td>This boy lost the race.</td></tr></table><br><div class="center"><button class="inactive-btn">Continue</button></div></div>'+
+            '<p>You should study the sentences carefully before continuing to the next page.</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions3" value="agree" required></td>'+
+            '<td><div class="section">'+
+            'Next, one of the sentences will be replaced by a question. Your job is to answer the question as clearly and directly as possible.</p>'+
+            '<div style="width:500px; margin:auto; border:2px; border-style:ridge; padding:.5em"><table style="margin-left:auto; margin-right:auto;"><tr><td><img src="img_boy1.png" style="width:100px;"></img></td><td><b><u>Which boy is this?</b></u></td></tr><tr><td><img src="img_boy2.png" style="width:100px;"></img></td><td>This boy lost the race.</td></tr></table><br><div class="center"><span style="color:red;"><b>Recording...</b></span></div></div>'+
+            '<p>The \"Recording...\" message at the bottom of the screen lets you know that your voice is being recorded. You will have <b>five seconds</b> to give your response.</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions4" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p><span style="background-color:lightgreen">\"the boy who won the race\"</span> and <span style="background-color:lightgreen">\"the one who won the race\"</span> are both <b>good answers</b> to the question above.</p>'+
+            '<p><span style="background-color:lightpink">\"This boy won the race\"</span> is a <b>bad answer</b> because it simply repeats the original sentence and does not directly answer the question.</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions5" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>After the recording is complete, you will have a chance to listen to your response and record it again if necessary.</p>'+
+            '<div style="width:500px; margin:auto; border:2px; border-style:ridge; padding:.5em"><table style="margin-left:auto; margin-right:auto;"><tr><td><img src="img_boy1.png" style="width:100px;"></img></td><td><b><u>Which boy is this?</b></u></td></tr><tr><td><img src="img_boy2.png" style="width:100px;"></img></td><td>This boy lost the race.</td></tr></table><br><div class="center"><i>Press the play button to hear your response</i></div><br><div class="center"><img src="img_recorder.png" style="width:300px;"></img></div><br><div class="center"><button class="inactive-btn">Accept Recording</button>&nbsp;&nbsp;<button class="inactive-btn">Record Again</button></div></div>'+
+            '<p>You should play back your responses for at least the first few trials to make sure that they are being recorded correctly.</p>'+
+            '</div></td></tr>'+
+            '</table>'+
+            '<p style="text-align:center;">The task will take about 10–15 minutes, and during that time you should give it your full attention.</p><br>',
+    };
+
+    var ept_prac_alert = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/multiethnic-children-exercising-gym-body-training-sport-activity-fitness-kids-cartoon-illustration_74855-14461.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Practice</span>'+
+            '<p>Now we will do a few practice trials to familiarize you with the procedure.</p>'+
+            '<p>For this practice phase, you will select the correct response instead of being recorded.</p>',
+        choices: ['Continue'],
+    };
+
+    var ept_prac_setup = {
+        type: 'html-button-response',
+        stimulus: jsPsych.timelineVariable('stimulus1'),
+        choices: ['Continue'],
+        data: {
+            trial_name: 'ept_practice',
+            trial_part: 'ept_prac_setup',
+        }
+    };
+
+    var ept_prac_response = {
+        type: 'html-button-response',
+        data: {
+            item: jsPsych.timelineVariable('item'),
+            correct: jsPsych.timelineVariable('correct'),
+            trial_name: 'ept_practice',
+            trial_part:'ept_prac_question',
+        },
+        stimulus: jsPsych.timelineVariable('stimulus2'),
+        choices: jsPsych.timelineVariable('choices'),
+        on_finish: function(data) {
+            var acc = false;
+            console.log('data.correct: ', data.correct);
+            console.log('data.response: ', data.response);
+            if (data.correct == data.response) {
+                acc = true;
+            }
+            data.accuracy = acc;
+            console.log('data.accuracy: ', data.accuracy);
+        }
+    };
+  
+    var ept_prac_feedback = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">Incorrect. Please read more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var ept_prac_feedback_conditional = {
+        timeline: [ept_prac_feedback],
+        conditional_function: function() {
+            var last_resp_acc = jsPsych.data.getLastTrialData().values()[0].accuracy;
+            if (last_resp_acc == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ept_prac_procedure = {
+        timeline: [ept_prac_setup, ept_prac_response, ept_prac_feedback_conditional],
+        timeline_variables: ept_prac_list,
+        randomize_order: true,
+    };
+
+    var ept_repeat_instructions_message = {
+        type: 'html-button-response',
+        stimulus:
+            '<img src="img_warning.png" height="150" title="image credit: Flaticon / Freepik (www.freepik.com)"><br>'+
+            '<p>You did not make enough correct responses to continue.</p>'+
+            '<p>Now you will have a chance to repeat the instructions and practice trials.</p>',
+        choices: ['Continue'],
+    };
+
+    var ept_repeat_instructions_conditional = {
+        timeline: [ept_repeat_instructions_message],
+        conditional_function: function() {
+            var last_prac_trials = jsPsych.data.get().filter({trial_part:'ept_prac_question'}).last(ept_prac_list.length);
+            var n_correct = last_prac_trials.filter({accuracy: true}).count();
+            var prop_corr = n_correct/ept_prac_list.length;
+            if (prop_corr < 1) {
+                repeat_prac = true;
+                return true;
+            } else {
+                repeat_prac = false;
+                return false;
+            }
+        }
+    };
+
+    var ept_instructions_prac_loop = {
+        timeline: [ept_instructions, ept_prac_alert, ept_prac_procedure, ept_repeat_instructions_conditional],
+        loop_function: function() {
+            if (repeat_prac == true) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        on_load: function() {
+            document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(ept_instructions_prac_loop);
+
+    var start_task1 = {
+        type: 'fullscreen',
+        fullscreen_mode: true,
+        message: 
+            '<img src="img_checked.png" height="150" title="image credit: Roundicons / Flaticon (www.flaticon.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>Now you\'re ready to start the task.</p>'+
+            '<p>From now on, your voice will be recorded when you are answering the questions.</p>'+
+            '<p>Click the \'Continue\' button to enter fullscreen mode and begin.</p>',
+        button_label: 'Continue',
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "visible";
+        }
+    };
+    timeline.push(start_task1);
+
+    var ept_count = 0; // number of trials completed, for updated progress bar
+    var ept_n_trials = 30; // number of trials in task, for updating progress bar
+
+    var ept_trial_setup = {
+        type: 'elicited-production-setup',
+        text1: jsPsych.timelineVariable('setup1'),
+        text2: jsPsych.timelineVariable('setup2'),
+        stimulus1: jsPsych.timelineVariable('image1'),
+        stimulus2: jsPsych.timelineVariable('image2'),
+        choices: ['Continue'],
+        data: {
+            trial_name: 'ept_task',
+            trial_part: 'ept_setup',
+        }
+    };
+
+    var ept_trial_response = {
+        type: 'elicited-production-response',
+        text1: jsPsych.timelineVariable('response1'),
+        text2: jsPsych.timelineVariable('response2'),
+        stimulus1: jsPsych.timelineVariable('image1'),
+        stimulus2: jsPsych.timelineVariable('image2'),
+        prompt: '<i>Press the play button to hear your response</i>',
+        button1: 'Accept Recording',
+        button2: 'Record Again',
+        data: {
+            item: jsPsych.timelineVariable('item'),
+            cond: jsPsych.timelineVariable('cond'),
+            stimulus: jsPsych.timelineVariable('stimulus'),
+            target: jsPsych.timelineVariable('target'),
+            task: 'english-elicited-production-task',
+            trial_name: 'ept_task',
+            trial_part: 'ept_response',
+        },
+        on_finish: function(data) {
+            ept_count++;
+            var progress = ept_count/ept_n_trials;
+            jsPsych.setProgressBar(progress);
+        }
+    };
+
+    var ept_variables_list1 = {
+        timeline: [ept_trial_setup, ept_trial_response],
+        timeline_variables: plist1,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 1 || CONDITION == 2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ept_variables_list2 = {
+        timeline: [ept_trial_setup, ept_trial_response],
+        timeline_variables: plist2,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 3 || CONDITION == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ept_variables_list3 = {
+        timeline: [ept_trial_setup, ept_trial_response],
+        timeline_variables: plist3,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 5 || CONDITION == 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ept_variables_list0 = {
+        timeline: [ept_trial_setup, ept_trial_response],
+        timeline_variables: plist0,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ept_main_procedure = {
+        timeline: [ept_variables_list1, ept_variables_list2, ept_variables_list3, ept_variables_list0]
+    };
+    timeline.push(ept_main_procedure);
+
+    // exit fullscreen
+
+    var exit_fullscreen_1 = {
+        type: 'fullscreen',
+        fullscreen_mode: false,
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(exit_fullscreen_1);
+
+    // break
+
+    var break1 = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/men-success-laptop-relieve-work-from-home-computer-great_10045-646.jpg" height="150" title="image credit: syarifahbrit / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>You have completed the first of four tasks in this experiment.</p>'+
+            '<p>Take a break if you need to, and then press the \'Continue\' button to go to the next task.</p>',
+        choices: ['Continue']
+    };
+    timeline.push(break1);
+
+    // -----------------------------------------------------------------------------
+    // task 2: self-paced reading task
+    // -----------------------------------------------------------------------------
+
+    // define running order for stimuli
+    var rlist1 = rshuffle(rcrit1, rfill);
+    var rlist2 = rshuffle(rcrit2, rfill);
+    var rlist3 = rshuffle(rcrit3, rfill);
+    var rlist4 = rshuffle(rcrit4, rfill);
+    var rlist5 = rshuffle(rcrit5, rfill);
+    var rlist6 = rshuffle(rcrit6, rfill);
+
+    var spr_instructions = {
+        type: 'survey-html-form',
+        data: {trial_name: 'spr_instructions'},
+        button_label: 'Continue',
+        html:
+            '<style>p {text-align:left;} .section {padding:.5em;} table {border-collapse: collapse;} .row {border:3px solid #c6c6c6;box-shadow:2px 2px 5px #999; padding:.5em;} td {text-align:left;}'+inactive_btn+' .center {display: flex; justify-content: center; align-items: center;}</style>'+
+            '<img src="https://image.freepik.com/free-vector/book-readers-concept_74855-6263.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Task 2: Sentence Reading Task</span>'+
+            '<p style="text-align:center;">Check the box next to each section to indicate that you have read and understood the instructions.</p>'+
+            '<table><tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions1" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>In this task, you will read sentences and answer questions about them. Some of the sentences might sound better or worse to you than others, but try to focus on reading them for meaning. At the beginning, the page will look something like this:</p>'+
+            '<div style="width:50%; margin:auto; border:2px; border-style:ridge; padding:2px; font-size: 1em; font-family:monospace;"><p style="text-align:center;">--- --- ------ --- ----</p></div><br>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions2" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>You will need to press the spacebar to view the first word. Keep pressing the spacebar to move through the sentence one word at a time, as shown below.</p>'+
+            '<div style="width:50%; margin:auto; border:2px; border-style:ridge; padding:2px; font-size: 1em; font-family:monospace;"><p style="text-align:center;">The --- ------ --- ----</p><p style="text-align:center;">--- dog ------ --- ----</p><p style="text-align:center;">--- --- chased --- ----</p><p style="text-align:center;">--- --- ------ the ----</p><p style="text-align:center;">--- --- ------ --- cat.</p></div>'+
+            '<p>Try to press the spacebar fast enough to allow for relatively natural reading of the sentence. If you need to pause for a few seconds (to stretch, for example), do so between sentences and not in the middle of a sentence.</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions3" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>After each sentence, there will be a short comprehension question like the one shown below.</p>'+
+            '<div style="width:50%; margin:auto; border:2px; border-style:ridge; padding:2px;"><p style="text-align:center;">What did the dog chase?</p><p style="text-align:center;"><button class="inactive-btn">the dog</button>&nbsp;&nbsp;<button class="inactive-btn">the car</button>&nbsp;&nbsp;<button class="inactive-btn">the cat</button>&nbsp;&nbsp;<button class="inactive-btn">the rat</button></p></div>'+
+            '<p>You will be notified if your answer is incorrect. When you get a question wrong, you should take it as a cue to read the sentences more carefully. Try to read the sentences as quickly as you can while still absorbing their meaning.</p>'+
+            '</div></td></tr>'+
+            '</table>'+
+            '<p style="text-align:center;">The task will take about 10–15 minutes, and during that time you should give it your full attention.</p>',
+    };
+
+    var spr_prac_alert = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/multiethnic-children-exercising-gym-body-training-sport-activity-fitness-kids-cartoon-illustration_74855-14461.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Practice</span>'+
+            '<p>Now we will do a few practice trials to familiarize you with the procedure.</p>',
+        choices: ['Continue'],
+    };
+
+    var spr_prac_stimulus = {
+        type: 'moving-window',
+        sent: jsPsych.timelineVariable('sent'),
+        font_size: 17,
+        data: {
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            trial_name: 'spr_practice',
+            trial_part: 'spr_prac_stimulus',
+        }
+    };
+
+    var spr_prac_rushing = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">You\'re going too fast. Please read the sentences more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var spr_prac_rushing_conditional = {
+        timeline: [spr_prac_rushing],
+        conditional_function: function() {
+            var string = jsPsych.data.getLastTrialData().values()[0].rt; // get reading times from last trial
+            var values = string.replace(/[\[\]']+/g,'').split`,`.map(x=>+x); // convert from string to array of numbers
+            var sum = values.reduce((previous, current) => current += previous); // calculate sum
+            var avg = sum / values.length; // calculate average
+            if (avg < 200) { // display warning if average reading time is too fast
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_prac_question = {
+        type: 'html-button-response',
+        stimulus: function(){return '<p>'+jsPsych.timelineVariable('question', true)+'</p>'},
+        choices: jsPsych.timelineVariable('choices'),
+        data: {
+            correct_answer: jsPsych.timelineVariable('correct'),
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            trial_name: 'spr_practice',
+            trial_part: 'spr_prac_question',
+        },
+        on_start: function(params) {
+            params.data.button_order = JSON.stringify(params.choices);
+
+        },
+        on_finish: function(data) {
+            var button_order = JSON.parse(data.button_order);
+            data.response_label = button_order[data.response];
+            var acc = false;
+            if (data.correct_answer == data.response_label) {
+                acc = true;
+            }
+            data.accuracy = acc;
+        }
+    };
+
+    var spr_prac_feedback = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">Incorrect. Please read more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var spr_prac_feedback_conditional = {
+        timeline: [spr_prac_feedback],
+        conditional_function: function() {
+            var last_resp_acc = jsPsych.data.getLastTrialData().values()[0].accuracy;
+            console.log(last_resp_acc);
+            if (last_resp_acc == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_prac_procedure = {
+        timeline: [spr_prac_stimulus, spr_prac_rushing_conditional, spr_prac_question, spr_prac_feedback_conditional],
+        timeline_variables: spr_prac_list,
+        randomize_order: true,
+    };
+
+    var spr_repeat_instructions_message = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="img_warning.png" height="150" title="image credit: Flaticon / Freepik (www.freepik.com)"><br>'+
+            '<p>You did not make enough correct responses to continue.</p>'+
+            '<p>Now you will have a chance to repeat the instructions and practice trials.</p>',
+        choices: ['Continue'],
+    };
+
+    var spr_repeat_instructions_conditional = {
+        timeline: [spr_repeat_instructions_message],
+        conditional_function: function() {
+            var last_prac_trials = jsPsych.data.get().filter({trial_part:'spr_prac_question'}).last(spr_prac_list.length);
+            var n_correct = last_prac_trials.filter({accuracy: true}).count();
+            var prop_corr = n_correct/spr_prac_list.length;
+            if (prop_corr < 1) {
+                repeat_prac = true;
+                return true;
+            } else {
+                repeat_prac = false;
+                return false;
+            }
+        }
+    };
+
+    var spr_instructions_prac_loop = {
+        timeline: [spr_instructions, spr_prac_alert, spr_prac_procedure, spr_repeat_instructions_conditional],
+        loop_function: function() {
+            if (repeat_prac == true) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        on_load: function() {
+            document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(spr_instructions_prac_loop);
+
+    var start_task2 = {
+        type: 'fullscreen',
+        fullscreen_mode: true,
+        message: 
+            '<img src="img_checked.png" height="150" title="image credit: Roundicons / Flaticon (www.flaticon.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>Now you\'re ready to start the task.</p>'+
+            '<p>Click the \'Continue\' button to enter fullscreen mode and begin.</p>',
+        button_label: 'Continue',
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "visible";
+        jsPsych.setProgressBar(0);
+        }
+    };
+    timeline.push(start_task2);
+
+    var spr_count = 0; // number of trials completed, for updated progress bar
+    var spr_n_trials = 70; // number of trials in task, for updating progress bar
+
+    var spr_stimulus = {
+        type: 'moving-window',
+        sent: function(){return jsPsych.timelineVariable('eng', true)+jsPsych.timelineVariable('coda', true)},
+        font_size: 17,
+        data: {
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            cond: jsPsych.timelineVariable('cond'),
+            task: 'english-self-paced-reading',
+            trial_name: 'spr-task',
+            trial_part: 'spr-stimulus',
+        }
+    };
+
+    var spr_rushing = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">You\'re going too fast. Please read the sentences more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var spr_rushing_conditional = {
+        timeline: [spr_rushing],
+        conditional_function: function() {
+            var string = jsPsych.data.getLastTrialData().values()[0].rt; // get reading times from last trial
+            var values = string.replace(/[\[\]']+/g,'').split`,`.map(x=>+x); // convert from string to array of numbers
+            var sum = values.reduce((previous, current) => current += previous); // calculate sum
+            var avg = sum / values.length; // calculate average
+            if (avg < 200) { // display warning if average reading time is too fast
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_question = {
+        type: 'html-button-response',
+        stimulus: function(){return '<p>'+jsPsych.timelineVariable('question', true)+'</p>'},
+        choices: jsPsych.timelineVariable('choices'),
+        data: {
+            correct_answer: jsPsych.timelineVariable('correct'),
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            cond: jsPsych.timelineVariable('cond'),
+            task: 'english-self-paced-reading',
+            trial_name: 'spr_task',
+            trial_part: 'spr_question',
+        },
+        on_start: function(params) {
+            params.data.button_order = JSON.stringify(params.choices);
+
+        },
+        on_finish: function(data) {
+            spr_count++;
+            var progress = spr_count/spr_n_trials;
+            jsPsych.setProgressBar(progress);
+            var button_order = JSON.parse(data.button_order);
+            data.response_label = button_order[data.response];
+            var acc = false;
+            if (data.correct_answer == data.response_label) {
+                acc = true;
+            }
+            data.accuracy = acc;
+        }
+    };
+
+    var spr_feedback = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">Incorrect. Please read more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var spr_feedback_conditional = {
+        timeline: [spr_feedback],
+        conditional_function: function() {
+            var last_resp_acc = jsPsych.data.getLastTrialData().values()[0].accuracy;
+            console.log(last_resp_acc);
+            if (last_resp_acc == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list1 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist1,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list2 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist2,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list3 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist3,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list4 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist4,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list5 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist5,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list6 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist6,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_variables_list0 = {
+        timeline: [spr_stimulus, spr_rushing_conditional, spr_question, spr_feedback_conditional],
+        timeline_variables: rlist0,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var spr_main_procedure = {
+        timeline: [spr_variables_list1, spr_variables_list2, spr_variables_list3, spr_variables_list4, spr_variables_list5, spr_variables_list6, spr_variables_list0]
+    };
+    timeline.push(spr_main_procedure);
+
+    // exit fullscreen
+
+    var exit_fullscreen_2 = {
+        type: 'fullscreen',
+        fullscreen_mode: false,
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(exit_fullscreen_2);
+
+    // break
+
+    var break2 = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/men-success-laptop-relieve-work-from-home-computer-great_10045-646.jpg" height="150" title="image credit: syarifahbrit / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>You have completed two of the four tasks in this experiment.</p>'+
+            '<p>Take a break if you need to, and then press the \'Continue\' button to go to the next task.</p>',
+        choices: ['Continue']
+    };
+    timeline.push(break2);
+
+    // -----------------------------------------------------------------------------
+    // task 3: acceptability judgment task
+    // -----------------------------------------------------------------------------
+
+    // define running order for stimuli
+    var jlist1 = rshuffle(rcrit2, rfill);
+    var jlist2 = rshuffle(rcrit3, rfill);
+    var jlist3 = rshuffle(rcrit4, rfill);
+    var jlist4 = rshuffle(rcrit5, rfill);
+    var jlist5 = rshuffle(rcrit6, rfill);
+    var jlist6 = rshuffle(rcrit1, rfill);
+
+    var ajt_instructions = {
+        type: 'survey-html-form',
+        data: {trial_name: 'ajt_instructions'},
+        button_label: 'Continue',
+        html:
+            '<style>p {text-align:left;} .section {padding:.5em;} table {border-collapse: collapse;} .row {border:3px solid #c6c6c6;box-shadow:2px 2px 5px #999; padding:.5em;} td {text-align:left;}'+inactive_btn+' .center {display: flex; justify-content: center; align-items: center;}</style>'+
+            '<img src="https://image.freepik.com/free-vector/happy-man-holding-five-golden-stars-customer-review-social-media-flat-illustration_74855-14060.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Task 3: Sentence Rating Task</span>'+
+            '<p style="text-align:center;">Check the box next to each section to indicate that you have read and understood the instructions.</p>'+
+            '<table><tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions1" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>Speakers of a language have an intuitive sense of which sentences are acceptable or unacceptable, even when they don\'t know exactly why. For example, most English speakers feel that the first sentence below is acceptable and that the second one is unacceptable.</p>'+
+            '<p>Acceptable Sentence: <span style="background-color:lightgreen">\"Mary thinks that John is likely to pass the test even if he doesn\'t study this weekend.\"</span></p>'+
+            '<p>Unacceptable Sentence: <span style="background-color:lightpink">\"Mary thinks that John is probable to pass the test even if he doesn\'t study this weekend.\"</span></p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions2" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>In this task, you will read sentences and rate them using the following scale where 1 means \"completely unacceptable\" and 6 means \"completely acceptable\":</p>'+
+            '<div style="width:75%; margin:auto; border:2px; border-style:ridge; padding:2px;"><p style="text-align:center; font-size:1.1em;">I think John is likely to pass the test even if he doesn\'t study this weekend.</p><p style="text-align:center;"><i>Completely Unacceptable</i>&nbsp;&nbsp;<button class="inactive-btn">1</button>&nbsp;&nbsp;<button class="inactive-btn">2</button>&nbsp;&nbsp;<button class="inactive-btn">3</button>&nbsp;&nbsp;<button class="inactive-btn">4</button>&nbsp;&nbsp;<button class="inactive-btn">5</button>&nbsp;&nbsp;<button class="inactive-btn">6</button>&nbsp;&nbsp;<i>Completely Acceptable</i></p><p style="text-align:center;">Press the zero key if you cannot rate the sentence</p></div>'+
+            '<p>When rating the sentences, ask yourself, \"Does this sound like something that might have been said on purpose by a native speaker of the language?\"</p>'+
+            '</div></td></tr>'+
+            '<tr class="spacer" height="20"><td></td></tr>'+
+            '<tr class="row"><td style="background-color:#c6c6c6;"><input type="checkbox" name="instructions3" value="agree" required></td>'+
+            '<td><div class="section">'+
+            '<p>There is a chance you might occasionally encounter sentences that you are unable to rate. For example, you may be unable to rate a sentence if it contains words that you do not know. If this happens, you can press the zero (\"0\") key on your keyboard instead of providing a rating for that sentence. However, we expect that most participants will have little or no need for the zero option.</p>'+
+            '</div></td></tr>'+
+            '</table>'+
+            '<p style="text-align:center;">The task will take about 10–15 minutes, and during that time you should give it your full attention.</p>',
+    };
+
+    var ajt_prac_alert = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/multiethnic-children-exercising-gym-body-training-sport-activity-fitness-kids-cartoon-illustration_74855-14461.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Practice</span><br>'+
+            '<div style="text-align:left;">'+
+            '<p>Now we will do a few practice trials to familiarize you with the procedure.</p>'+
+            '<p>A few things to keep in mind during the practice phase:</p>'+
+            '<ul style="margin-top:-15px;">'+
+            '<li>Each of the practice trials is designed to have either high or low acceptability.</li>'+
+            '<li>You should give high ratings to the acceptable sentences and low ratings to the unacceptable ones.</li>'+
+            '<li>You will be notified if your answer is incorrect.</li>'+
+            '</div>',
+        choices: ['Continue'],
+    };
+
+    var ajt_prac_trial = {
+        type: 'acceptability-judgment',
+        stimulus: jsPsych.timelineVariable('sent'),
+        styling: 'font-size:1.1em',
+        choices: ['1', '2', '3', '4', '5', '6'],
+        leftComment: '<i>Completely Unacceptable</i>',
+        rightComment: '<i>Completely Acceptable</i>',
+        prompt: '<p>Press the zero key if you cannot rate the sentence</p>',
+        keypress: '0',
+        data: {
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            cond: jsPsych.timelineVariable('cond'),
+            trial_name: 'ajt_practice',
+            trial_part:'ajt_prac_trial',
+        },
+        on_finish: function(data) {
+            var acc = false;
+            if (data.cond == 'gram' && data.button_pressed > 2) {
+                acc = true;
+            } else if (data.cond == 'ungr' && data.button_pressed < 3) {
+                acc = true;
+            }
+            data.accuracy = acc;
+        }
+    };
+
+    var ajt_prac_feedback_correct = {
+        type: 'html-keyboard-response',
+        stimulus: '',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 500,
+    };
+
+    var ajt_prac_feedback_conditional_correct = {
+        timeline: [ajt_prac_feedback_correct],
+        conditional_function: function() {
+            var last_resp_acc = jsPsych.data.getLastTrialData().values()[0].accuracy;
+            console.log('last_resp_acc: ', last_resp_acc);
+            if (last_resp_acc == true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_prac_feedback_incorrect = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">Incorrect. Please read more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var ajt_prac_feedback_conditional_incorrect = {
+        timeline: [ajt_prac_feedback_incorrect],
+        conditional_function: function() {
+            var last_resp_acc = jsPsych.data.getLastTrialData().values()[0].accuracy;
+            if (last_resp_acc == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_prac_procedure = {
+        timeline: [ajt_prac_trial, ajt_prac_feedback_conditional_correct, ajt_prac_feedback_conditional_incorrect],
+        timeline_variables: eng_ajt_prac_list,
+        randomize_order: true,
+    };
+
+    var ajt_repeat_instructions_message = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="img_warning.png" height="150" title="image credit: Flaticon / Freepik (www.freepik.com)"><br>'+
+            '<p>You did not make enough correct responses to continue.</p>'+
+            '<p>Now you will have a chance to repeat the instructions and practice trials.</p>',
+        choices: ['Continue'],
+    };
+
+    var ajt_repeat_instructions_conditional = {
+        timeline: [ajt_repeat_instructions_message],
+        conditional_function: function() {
+            var last_prac_trials = jsPsych.data.get().filter({trial_part:'ajt_prac_trial'}).last(eng_ajt_prac_list.length);
+            var n_correct = last_prac_trials.filter({accuracy: true}).count();
+            var prop_corr = n_correct/eng_ajt_prac_list.length;
+            if (prop_corr < 1) {
+                repeat_prac = true;
+                return true;
+            } else {
+                repeat_prac = false;
+                return false;
+            }
+        }
+    };
+
+    var ajt_instructions_prac_loop = {
+        timeline: [ajt_instructions, ajt_prac_alert, ajt_prac_procedure, ajt_repeat_instructions_conditional],
+        loop_function: function() {
+            if (repeat_prac == true) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        on_load: function() {
+            document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(ajt_instructions_prac_loop);
+
+    var start_task3 = {
+        type: 'fullscreen',
+        fullscreen_mode: true,
+        message: 
+            '<img src="img_checked.png" height="150" title="image credit: Roundicons / Flaticon (www.flaticon.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>Now you\'re ready to start the task.</p>'+
+            '<p>You will no longer be notified when your answers are incorrect.</p>'+
+            '<p>Click the \'Continue\' button to enter fullscreen mode and begin.</p>',
+        button_label: 'Continue',
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "visible";
+        jsPsych.setProgressBar(0);
+        }
+    };
+    timeline.push(start_task3);
+
+    var ajt_count = 0; // number of trials completed, for updated progress bar
+    var ajt_n_trials = 70; // number of trials in task, for updating progress bar
+
+    var ajt_trial = {
+        type: 'acceptability-judgment',
+        stimulus: function(){return jsPsych.timelineVariable('eng', true)+jsPsych.timelineVariable('time', true)},
+        styling: 'font-size:1.1em',
+        choices: ['1', '2', '3', '4', '5', '6'],
+        leftComment: '<i>Completely Unacceptable</i>',
+        rightComment: '<i>Completely Acceptable</i>',
+        prompt: '<p>Press the zero key if you cannot rate the sentence</p>',
+        keypress: '0',
+        post_trial_gap: 500,
+        data: {
+            type: jsPsych.timelineVariable('type'),
+            item: jsPsych.timelineVariable('item'),
+            cond: jsPsych.timelineVariable('cond'),
+            task: 'english-acceptability-judgment-task',
+            trial_name: 'ajt_task',
+            trial_part: 'ajt_trial',
+        },
+        on_finish: function(data) {
+            var acc = false;
+            if ((data.cond == 'gram' || data.cond == 'cond1' || data.cond == 'cond2') && data.button_pressed > 2) {
+                acc = true;
+            } else if ((data.cond == 'ungr' || data.cond == 'cond3' || data.cond == 'cond4' || data.cond == 'cond5' || data.cond == 'cond6') && data.button_pressed < 3) {
+                acc = true;
+            }
+            data.accuracy = acc;
+            ajt_count++;
+            var progress = ajt_count/ajt_n_trials;
+            jsPsych.setProgressBar(progress);
+        },
+    };
+
+    var ajt_feedback_rushing = {
+        type: 'html-keyboard-response',
+        stimulus: '<span style="color:red;font-size:30px;">You\'re going too fast. Please read the sentences more carefully.</span>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 3000,
+    };
+
+    var ajt_feedback_rushing_conditional = {
+        timeline: [ajt_feedback_rushing],
+        conditional_function: function() {
+            var last_resp_rt = jsPsych.data.getLastTrialData().values()[0].rt;
+            if (last_resp_rt < 2000) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list1 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist1,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list2 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist2,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list3 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist3,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list4 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist4,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list5 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist5,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list6 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: jlist6,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_variables_list0 = {
+        timeline: [ajt_trial, ajt_feedback_rushing_conditional],
+        timeline_variables: rlist0,
+        randomize_order: false,
+        conditional_function: function() {
+            if (CONDITION == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    var ajt_main_procedure = {
+        timeline: [ajt_variables_list1, ajt_variables_list2, ajt_variables_list3, ajt_variables_list4, ajt_variables_list5, ajt_variables_list6, ajt_variables_list0]
+    };
+    timeline.push(ajt_main_procedure);
+
+    // exit fullscreen
+
+    var exit_fullscreen_3 = {
+        type: 'fullscreen',
+        fullscreen_mode: false,
+        on_finish: function() {
+        document.getElementById("jspsych-progressbar-container").style.visibility = "hidden";
+        }
+    };
+    timeline.push(exit_fullscreen_3);
+
+    // break
+
+    var break3 = {
+        type: 'html-button-response',
+        stimulus: 
+            '<img src="https://image.freepik.com/free-vector/men-success-laptop-relieve-work-from-home-computer-great_10045-646.jpg" height="150" title="image credit: syarifahbrit / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+            '<p>You have completed three of the four tasks in this experiment.</p>'+
+            '<p>Take a break if you need to, and then press the \'Continue\' button to go to the final task.</p>',
+        choices: ['Continue']
+    };
+    timeline.push(break3);
+
+    // -----------------------------------------------------------------------------
+    // task 4: c-test
+    // -----------------------------------------------------------------------------
+
+    var ctest = {
+        type: 'survey-html-form',
+        data: {trial_name: 'ctest'},
+        button_label: 'Continue',
+        html: '<style>p {text-align:left; spellcheck=false;} input[type="text"] {width:8ch;} fieldset {border:1px solid #999;box-shadow:2px 2px 5px #999;} legend {background:#fff;text-align:left;font-size:110%;}</style>'+
+            '<img src="https://image.freepik.com/free-vector/tiny-screenwriter-sitting-retro-typewriter-thinking-screenplay-while-paper-drafts-flying-around-author_74855-14178.jpg" height="150" title="image credit: pch.vector / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Task 4: Gap-Filling Task</span>'+
+            '<p><b>Instructions:</b> In the following passages, parts of some words have been deleted. Your job is to complete the words by filling in the missing letters. In cases where more than one answer is possible, choose the one that fits best in the context. If you do not know the right answer, then type in your best guess.</p>'+
+            '<p><b>Example:</b> The world is full of flowers. They <nobr>co<input type="text" name="example1" value="me" readonly="readonly"></nobr> in <nobr>diff<input type="text" name="example2" value="erent" readonly="readonly"></nobr> shapes <nobr>a<input type="text" name="example3" value="nd" readonly="readonly"></nobr> colors.</p>'+
+            '<fieldset><legend style="text-align:left;"><b>Passage 1</b></legend>'+
+            '<p spellcheck="false">Algae are organisms, or living things, that are found all over the world. Algae are <nobr>ve<input name="algae_01" type="text" required></nobr> important <nobr>bec<input name="algae_02" type="text" required></nobr> they <nobr>ma<input name="algae_03" type="text" required></nobr> oxygen, <nobr>wh<input name="algae_04" type="text" required></nobr> humans and other animals <nobr>ne<input name="algae_05" type="text" required></nobr> to <nobr>bre<input name="algae_06" type="text" required>.</nobr> Some algae, such as <nobr>sea<input name="algae_07" type="text" required>,</nobr> look <nobr>li<input name="algae_08" type="text" required></nobr> plants. <nobr>How<input name="algae_09" type="text" required>,</nobr> algae are <nobr>actu<input name="algae_10" type="text" required></nobr> neither plants <nobr>n<input name="algae_11" type="text" required></nobr> animals. <nobr>Ins<input name="algae_12" type="text" required>,</nobr> they <nobr>bel<input name="algae_13" type="text" required></nobr> to a <nobr>gr<input name="algae_14" type="text" required></nobr> of living things <nobr>cal<input name="algae_15" type="text" required></nobr> protists. <nobr>Th<input name="algae_16" type="text" required></nobr> are <nobr>ma<input name="algae_17" type="text" required></nobr> different <nobr>spe<input name="algae_18" type="text" required>,</nobr> or <nobr>ty<input name="algae_19" type="text" required>,</nobr> of algae. They are <nobr>mo<input name="algae_20" type="text" required></nobr> commonly found in <nobr>bod<input name="algae_21" type="text" required></nobr> of <nobr>wa<input name="algae_22" type="text" required>,</nobr> such as <nobr>oce<input name="algae_23" type="text" required>,</nobr> rivers, <nobr>la<input name="algae_24" type="text" required>,</nobr> streams, <nobr>po<input name="algae_25" type="text" required>,</nobr> and marshes.</p></fieldset><br>'+
+            '<fieldset><legend style="text-align:left;"><b>Passage 2</b></legend>'+
+            '<p spellcheck="false">Noise pollution is unwanted or excessive sound that can be harmful to human health and environmental quality. Noise pollution is commonly <nobr>gene<input name="noise_26" type="text" required></nobr> inside <nobr>indus<input name="noise_27" type="text" required></nobr> facilities and other <nobr>workp<input name="noise_28" type="text" required>,</nobr> but it also <nobr>co<input name="noise_29" type="text" required></nobr> from <nobr>hig<input name="noise_30" type="text" required>,</nobr> railway, and <nobr>airp<input name="noise_31" type="text" required></nobr> traffic and from outdoor <nobr>constr<input name="noise_32" type="text" required></nobr> activities. Noise is <nobr>mo<input name="noise_33" type="text" required></nobr> than a <nobr>me<input name="noise_34" type="text" required></nobr> nuisance. At <nobr>cer<input name="noise_35" type="text" required></nobr> levels and <nobr>dura<input name="noise_36" type="text" required></nobr> of exposure, it can cause <nobr>phys<input name="noise_37" type="text" required></nobr> damage to the <nobr>ear<input name="noise_38" type="text" required></nobr> and the <nobr>sens<input name="noise_39" type="text" required></nobr> hairs of the <nobr>in<input name="noise_40" type="text" required></nobr> ear and <nobr>res<input name="noise_41" type="text" required></nobr> in <nobr>temp<input name="noise_42" type="text" required></nobr> or <nobr>perm<input name="noise_43" type="text" required></nobr> hearing loss. In <nobr>addi<input name="noise_44" type="text" required></nobr> to causing hearing loss, excessive noise exposure can also <nobr>ra<input name="noise_45" type="text" required></nobr> blood <nobr>pres<input name="noise_46" type="text" required>,</nobr> cause irritability, <nobr>anx<input name="noise_47" type="text" required>,</nobr> and <nobr>men<input name="noise_48" type="text" required></nobr> fatigue, and <nobr>inte<input name="noise_49" type="text" required></nobr> with <nobr>sl<input name="noise_50" type="text" required>,</nobr> recreation, and personal communication.</p></fieldset><br>'
+    };
+    timeline.push(ctest);
+
+    // -----------------------------------------------------------------------------
+    // wrap-up
+    // -----------------------------------------------------------------------------
+
+    // exit survey
+
+    var exit_survey = {
+        type: 'survey-html-form',
+        data: {trial_name: 'exit_survey'},
+        button_label: 'Continue',
+        html: 
+            '<style>p {text-align:left; spellcheck=false;} input[type="text"] {width:8ch;} fieldset {border:1px solid #999;box-shadow:2px 2px 5px #999;} legend {background:#fff;text-align:left;font-size:110%;}</style>'+
+            '<img src="https://image.freepik.com/free-vector/online-survey-analysis-electronic-data-collection-digital-research-tool-computerized-study-analyst-considering-feedback-results-analyzing-info_335657-2385.jpg" height="150" title="image credit: vectorjuice / Freepik (www.freepik.com)"><br>'+
+            '<span style="font-size:125%; font-weight:bold;">Exit Survey</span>'+
+            '<p>What do you think the researcher is trying to find out from this experiment?</p>'+
+            '<p style="text-align:left;"><textarea name="exit_purpose" rows="3" style="width:90%;" required></textarea></p>'+
+            '<p>If you experienced any difficulties while taking part in the experiment, please describe them here.</p>'+
+            '<p style="text-align:left;"><textarea name="exit_difficulties" rows="3" style="width:90%;"></textarea></p>'+
+            '',
+    };
+    timeline.push(exit_survey);
+
+    // blank trial that ends the experiment and takes the participant to the end message
+
+    var end_task = {
+        type: 'html-keyboard-response',
+        stimulus: '',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: 1,
+        on_finish: function(){
+            jsPsych.endExperiment(end_message);
+        }
+    };
+    timeline.push(end_task);
+
+    // end message
+
+    var end_message = 
+        '<img src="https://image.freepik.com/free-vector/men-success-laptop-relieve-work-from-home-computer-great_10045-646.jpg" height="150" title="image credit: syarifahbrit / Freepik (www.freepik.com)"><br>'+
+        '<span style="font-size:125%; font-weight:bold;">Nice work!</span>'+
+        '<p>You have completed the final task. Click on the link below to return to the Prolific website and finish the experiment.</p>'+
+        '<p style="text-align:center;"><a href="https://app.prolific.co/submissions/complete?cc=5AA90C41" target="_blank" style="font-size:115%;">Click here to return to Prolific</a></p>'+
+        '<p style="text-align:left; width:90%; margin:auto; border:2px; border-style:ridge; padding:10px;">IMPORTANT: If a warning pops up when you attempt to exit this window, it likely means that your results have not finished uploading to the server yet. If you see such a warning, please wait for a minute or two and then try again.</p>'
+
+    */
+
+    // initiate experiment
+
+    jsPsych.init({
+        timeline: timeline,
+        show_preload_progress_bar: true,
+        show_progress_bar: true,
+        auto_update_progress_bar: false,
+        on_finish: function(){jsPsych.data.displayData();}
+    });
+
+</script>
+</html>
