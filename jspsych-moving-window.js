@@ -1,5 +1,7 @@
-/*
- * Example plugin template
+/**
+ * jspsych-moving-window
+ * written by Fred Zenker working from Josh de Leeuw's
+ * YouTube tutorial (https://www.youtube.com/watch?v=XQcsFwAmbiw)
  */
 
 jsPsych.plugins["moving-window"] = (function() {
