@@ -2,7 +2,7 @@
 
 This is a custom jsPsych plugin I wrote to create a new comprehension question format for my self-paced reading experiments.
 
-<img src="img_demo.gif" alt="Demo" width="500"/>
+<div style="text-align:center;"><img src="img_demo.gif" alt="Demo" width="600"/></div>
 
 The code is adapted from Shane Martin's [jspsych-survey-multi-choice](https://www.jspsych.org/plugins/jspsych-survey-multi-choice/) plugin.
 
