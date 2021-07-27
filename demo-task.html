@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-call-function.js"></script>
     <script src="jspsych-comprehension-question.js"></script>
     <script src="jspsych-moving-window.js"></script>
     <link rel="stylesheet" href="jspsych/css/jspsych.css"></link>
@@ -16,28 +17,39 @@
     var trial1 = {
         item: 'item01',
         cond: 'cond1',
-        sent: 'The dog chased the cat.',
-        word: 'chased',
-        menu1: ['the cat', 'the dog'],
-        correct1: 'the dog',
-        menu2: ['the cat', 'the dog'],
-        correct2: 'the cat'
+        sent: 'Mary saw the dog chase the cat today.',
+        text_left: 'Mary saw',
+        text_center: 'chase',
+        text_right: 'today',
+        options_left: jsPsych.randomization.shuffle(['the cat', 'the dog']),
+        correct_left: 'the dog',
+        options_right: jsPsych.randomization.shuffle(['the cat', 'the dog']),
+        correct_right: 'the cat'
     };
 
     var trial2 = {
         item: 'item02',
         cond: 'cond1',
-        sent: 'The cat ate the rat.',
-        word: 'ate',
-        menu1: ['the cat', 'the rat'],
-        correct1: 'the cat',
-        menu2: ['the cat', 'the rat'],
-        correct2: 'the rat'
+        sent: 'John saw the cat eat the rat today.',
+        text_center: 'ate',
+        options_left: jsPsych.randomization.shuffle(['John', 'the cat', 'the rat']),
+        correct_left: 'the cat',
+        options_right: jsPsych.randomization.shuffle(['John', 'the cat', 'the rat']),
+        correct_right: 'the rat'
     };
 
     // make list of trials
 
     var trials = [trial1, trial2]
+
+    // turn cursor off
+
+    var cursor_off = {
+        type: 'call-function',
+        func: function() {
+            document.body.style.cursor= "none";
+        }
+    };
 
     // set parameters for moving-window trial
 
@@ -51,16 +63,27 @@
         }
     };
 
+    // turn cursor on
+
+    var cursor_on = {
+        type: 'call-function',
+        func: function() {
+            document.body.style.cursor= "auto";
+        }
+    };
+
     // set parameters for comprehension question trial
     
     var question = {
         type: 'comprehension-question',
         prompt: 'What happened in the sentence?',
-        word: jsPsych.timelineVariable('word'),
-        menu1: jsPsych.timelineVariable('menu1'),
-        correct1: jsPsych.timelineVariable('correct1'),
-        menu2: jsPsych.timelineVariable('menu2'),
-        correct2: jsPsych.timelineVariable('correct2'),
+        text_left: jsPsych.timelineVariable('text_left'),
+        text_center: jsPsych.timelineVariable('text_center'),
+        text_right: jsPsych.timelineVariable('text_right'),
+        options_left: jsPsych.timelineVariable('options_left'),
+        correct_left: jsPsych.timelineVariable('correct_left'),
+        options_right: jsPsych.timelineVariable('options_right'),
+        correct_right: jsPsych.timelineVariable('correct_right'),
         data: {
             item: jsPsych.timelineVariable('item'),
             cond: jsPsych.timelineVariable('cond')
@@ -70,7 +93,7 @@
     // define procedure for task
 
     var procedure = {
-        timeline: [sentence, question],
+        timeline: [cursor_off, sentence, cursor_on, question],
         timeline_variables: trials
     };
     timeline.push(procedure);

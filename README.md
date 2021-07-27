@@ -9,9 +9,11 @@ The code is adapted from Shane Martin's [jspsych-survey-multi-choice](https://ww
 ## Parameters
 
 - __prompt:__ The text displayed at the top of the screen during the trial
-- __word:__ The word or words that appear between the two input fields
-- __menu1:__ The response options for the first input field
-- __menu2:__ The response options for the second input field
-- __correct1:__ The correct answer for the first input field
-- __correct2:__ The correct answer for the second input field
-- __button_label:__ The label for the button to continue to the next trial
+- __text_left:__ Text to display to the left of the input fields
+- __text_center:__ Text to display between the two input fields
+- __text_right:__ Text to display to the right of the input fields
+- __options_left:__ Response options for the first input field
+- __options_right:__ Response options for the second input field
+- __correct_left:__ Correct answer for the first input field
+- __correct_right:__ Correct answer for second input field
+- __button_label:__ Label for the button to continue to the next trial

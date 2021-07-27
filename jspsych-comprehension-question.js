@@ -16,43 +16,55 @@ jsPsych.plugins['comprehension-question'] = (function() {
           default: undefined,
           description: 'Prompt text'
       },
-      word: {
+      text_left: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Word',
-        default: undefined,
-        description: 'The word or words to display between the two input menus'
+        pretty_name: 'Left Side Text',
+        default: '',
+        description: 'Text to display to the left of the input fields'
       },
-      menu1: {
+      text_center: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Center Text',
+        default: '',
+        description: 'Text to display between the two input fields'
+      },
+      text_right: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Right Side Text',
+        default: '',
+        description: 'Text to display to the right of the input fields'
+      },
+      options_left: {
           type: jsPsych.plugins.parameterType.STRING,
-          pretty_name: 'Input Menu 1',
+          pretty_name: 'Left Side Options',
           array: true,
           default: undefined,
-          description: 'Options for the first radio input menu'
+          description: 'Response options for the first input field'
       },
-      menu2: {
+      options_right: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Input Menu 2',
+        pretty_name: 'Right Side Options',
         array: true,
         default: undefined,
-        description: 'Options for the second radio input menu'
+        description: 'Response options for the second input field'
       },
-      correct1: {
+      correct_left: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Correct Answer 1',
+        pretty_name: 'Left Side Correct Answer',
         default: null,
-        description: 'Correct answer from first radio input menu'
+        description: 'Correct answer for the first input field'
       },
-      correct2: {
+      correct_right: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Correct Answer 2',
+        pretty_name: 'Right Side Correct Answer',
         default: null,
-        description: 'Correct answer from second radio input menu'
+        description: 'Correct answer for second input field'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
         default:  'Continue',
-        description: 'Label of the button.'
+        description: 'Label for the button to continue to the next trial'
       },
     }
   }
@@ -82,28 +94,34 @@ jsPsych.plugins['comprehension-question'] = (function() {
     // create table
     html += '<table><tr>';
 
+    // add text on left side of input fields
+    html += '<td style="text-align: center;">'+trial.text_left+'</td>';
+
     // add blank cell to left of trial.word
     html += '<td style="border: 1.5px solid black;"></td>';
 
     // add word or words to display between two input menus
-    html += '<td style="text-align: center;"> '+trial.word+' </td>';
+    html += '<td style="text-align: center;">'+trial.text_center+'</td>';
 
     // add blank cell to right of trial.word
-    html += '<td style="border: 1.5px solid black;"></td></tr>';
+    html += '<td style="border: 1.5px solid black;"></td>';
+
+    // add text on right side of input fields
+    html += '<td style="text-align: center;"> '+trial.text_right+' </td></tr>';
     
     // create first input menu
-    html += '<tr><td style="text-align: left; background-color:#f7f3f2;  box-shadow:2px 2px 5px #999;">'+
-    '<div id="menu1container">';
-    for (var j = 0; j < trial.menu1.length; j++) {
+    html += '<tr><td></td><td style="text-align: left; background-color:#f7f3f2;  box-shadow:2px 2px 5px #999;">'+
+    '<div id="options_left_container">';
+    for (var j = 0; j < trial.options_left.length; j++) {
       // add labels
-      var menu1_option_id_name = "jspsych-comprehension-question-option-menu1-"+j;
-      var menu1_input_name = 'jspsych-comprehension-question-response-menu1';
-      var menu1_input_id = 'jspsych-comprehension-question-response-menu1-'+j;
+      var options_left_option_id_name = "jspsych-comprehension-question-option-options_left-"+j;
+      var options_left_input_name = 'jspsych-comprehension-question-response-options_left';
+      var options_left_input_id = 'jspsych-comprehension-question-response-options_left-'+j;
       // add radio button container
-      html += '<div id="'+menu1_option_id_name+'" class="jspsych-comprehension-question-option">';
-      html += '<label class="jspsych-comprehension-question-text" for="'+menu1_input_id+'">';
-      html += '<input type="radio" name="'+menu1_input_name+'" id="'+menu1_input_id+'" value="'+trial.menu1[j]+'" required></input>';
-      html += trial.menu1[j]+'</label>';
+      html += '<div id="'+options_left_option_id_name+'" class="jspsych-comprehension-question-option">';
+      html += '<label class="jspsych-comprehension-question-text" for="'+options_left_input_id+'">';
+      html += '<input type="radio" name="'+options_left_input_name+'" id="'+options_left_input_id+'" value="'+trial.options_left[j]+'" required></input>';
+      html += trial.options_left[j]+'</label>';
       html += '</div>';
     };
     html += '</div></td>';
@@ -114,23 +132,23 @@ jsPsych.plugins['comprehension-question'] = (function() {
     // create second radio input menu
     html += 
     '<td style="text-align: left; background-color:#f7f3f2; box-shadow:2px 2px 5px #999;">'+
-    '<div id="menu2container">';
-    for (var j = 0; j < trial.menu2.length; j++) {
+    '<div id="options_right_container">';
+    for (var j = 0; j < trial.options_right.length; j++) {
       // add labels
-      var menu2_option_id_name = "jspsych-comprehension-question-option-menu2-"+j;
-      var menu2_input_name = 'jspsych-comprehension-question-response-menu2';
-      var menu2_input_id = 'jspsych-comprehension-question-response-menu2-'+j;
+      var options_right_option_id_name = "jspsych-comprehension-question-option-options_right-"+j;
+      var options_right_input_name = 'jspsych-comprehension-question-response-options_right';
+      var options_right_input_id = 'jspsych-comprehension-question-response-options_right-'+j;
       // add radio button container
-      html += '<div id="'+menu2_option_id_name+'" class="jspsych-comprehension-question-option">';
-      html += '<label class="jspsych-comprehension-question-text" for="'+menu2_input_id+'">';
-      html += '<input type="radio" name="'+menu2_input_name+'" id="'+menu2_input_id+'" value="'+trial.menu2[j]+'" required></input>';
-      html += trial.menu2[j]+'</label>';
+      html += '<div id="'+options_right_option_id_name+'" class="jspsych-comprehension-question-option">';
+      html += '<label class="jspsych-comprehension-question-text" for="'+options_right_input_id+'">';
+      html += '<input type="radio" name="'+options_right_input_name+'" id="'+options_right_input_id+'" value="'+trial.options_right[j]+'" required></input>';
+      html += trial.options_right[j]+'</label>';
       html += '</div>';
     };
     html += '</div>';
 
     // close table
-    html += '</td></tr></table>';
+    html += '</td><td></td></tr></table>';
     
     // add submit button
     html += '<input type="submit" id="'+plugin_id_name+'-next" class="'+plugin_id_name+' jspsych-btn"' + (trial.button_label ? ' value="'+trial.button_label + '"': '') + '></input>';
@@ -146,18 +164,18 @@ jsPsych.plugins['comprehension-question'] = (function() {
       var response_time = endTime - startTime;
 
     // create object to hold responses
-    var container1 = display_element.querySelector('#menu1container');
+    var container1 = display_element.querySelector('#options_left_container');
     if(container1.querySelector("input[type=radio]:checked") !== null){
       val1 = container1.querySelector("input[type=radio]:checked").value;
     };
-    var container2 = display_element.querySelector('#menu2container');
+    var container2 = display_element.querySelector('#options_right_container');
     var val2 = "";
     if(container2.querySelector("input[type=radio]:checked") !== null){
       val2 = container2.querySelector("input[type=radio]:checked").value;
     };
 
     // check accuracy
-    if (val1 == trial.correct1 & val2 == trial.correct2) {
+    if (val1 == trial.correct_left & val2 == trial.correct_right) {
       acc = true
     } else {
       acc = false
